@@ -1,0 +1,158 @@
+<!-- add_project.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add new member</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        input,
+        select,
+        textarea {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            width: 100%; /* 100% width */
+            min-width: calc(100% - 16px); /* Min width excluding padding */
+            max-width: calc(100% - 16px); /* Max width excluding padding */
+            height: 80px; /* Initial height */
+            min-height: 80px; /* Min height */
+            max-height: 200px; /* Max height */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+
+
+<body>
+<form method="POST">
+    {% csrf_token %}
+    {{ error }}
+    <h1>Новый участник</h1>
+
+    <label for="first_name">Имя:</label>
+    {{ form.first_name }}
+
+    <label for="second_name">Отчество:</label>
+    {{ form.second_name }}
+
+    <label for="last_name">Фамилия:</label>
+    {{ form.last_name }}
+
+    <label for="date_of_birth" id="endDateLabel">Дата рождения:</label>
+    <input type="date" id="date_of_birth" name="date_of_birth">
+
+    <label for="status">Школьник/Студент:</label>
+    {{ form.status }}
+
+    <label for="team">Представителем какого совета вы являетесь:</label>
+    {{ form.team }}
+
+    <label for="email">Email:</label>
+    {{ form.email }}
+
+    <label for="phone">Телефон:</label>
+    <input id="phone" name="phone" required placeholder="+79991829028">
+    {#    {{ form.phone }}#}
+
+    <label for="tg_username">Telegram:</label>
+    <input id="tg_username" name="tg_username" required placeholder="@arseny_volodko">
+    {#    {{ form.tg_username }}#}
+
+    <label for="city">Город проживания:</label>
+    {{ form.city }}
+
+    <label for="school">Школа/ВУЗ:</label>
+    {{ form.school }}
+
+    <label for="grade">Класс/Курс:</label>
+    {{ form.grade }}
+
+    <label for="languages">Иностранные языки</label>
+    <textarea id="languages" name="languages" rows="4" required placeholder=
+            "Русский - родной
+Английский - B2
+Испанский - A2
+..."></textarea>
+
+    <label for="subjects">Интересующие предметы:</label>
+    {{ form.subjects }}
+
+    <label for="skills">Расскажите о своих навыках, умениях:</label>
+    <textarea id="skills" name="skills" rows="4" required placeholder="Управление проектами
+Верстка сайтов
+..."></textarea>
+
+    <label for="hobbies">Расскажите о своих увлечениях:</label>
+    {{ form.hobbies }}
+
+    <label for="achievements">Расскажите о своих достижениях:</label>
+    <textarea id="achievements" name="achievements" rows="4" required placeholder="Победитель Большой перемены - 2020г
+Победитель заключительного этапа ВСОШ по информатике - 2021г
+..."></textarea>
+
+    <label for="more_info">Напишите здесь о себе все, что хотите. Не стесняйтесь:</label>
+    <textarea id="more_info" name="more_info" rows="4" required placeholder="Владение английским - B2
+..."></textarea>
+
+    <button type="submit">Добавить</button>
+</form>
+
+</body>
+
+</html>

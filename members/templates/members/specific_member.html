@@ -1,0 +1,206 @@
+<!-- your_template.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ member.get_full_name }}</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 20px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 10vh;
+            background: #dcdcdc; /* Light gray background */
+        }
+
+        .container2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 10vh;
+            background: none;
+        }
+
+        .container2 a,
+        .container2 form {
+            margin: 10px; /* Убедимся, что внутренний отступ сброшен */
+        }
+
+        .nav-link {
+            color: #333; /* Dark gray text color */
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link-custom {
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            background-color: #798083; /* Blue background */
+            color: white; /* White text */
+        }
+
+        .nav-link:hover {
+            background-color: #798083; /* Blue background on hover */
+            color: white; /* White text on hover */
+        }
+
+        .logout-btn {
+            color: #333; /* Dark gray text color */
+            font-size: 20px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: transparent; /* Transparent background */
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #798083; /* Red background on hover */
+            color: white; /* White text on hover */
+        }
+
+        .add-btn {
+            display: inline-block;
+            padding: 7px 50px;
+            background-color: #798083;
+            color: white;
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin: 0 auto; /* Добавьте эту строку для выравнивания по центру */
+            text-align: center;
+            border: none;
+        }
+
+        .add-btn:hover {
+            background-color: #dcdcdc; /* Цвет фона при наведении */
+            color: #333; /* Черный текст при наведении */
+        }
+
+        h2 {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .project-manager {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 20px;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+
+        .table-container {
+            margin: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px; /* Add some space above the table */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            width: 150px; /* Set a fixed width for the columns */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="nav-link" href="{% url 'team:all_teams' %}">Советы</a>
+    <a class="nav-link" href="{% url 'project:all_projects' %}">Проекты</a>
+    <a class="nav-link" href="{% url 'grant:all_grants' %}">Гранты</a>
+    <a class="nav-link-custom" href="{% url 'members:all_members' %}">Участники</a>
+    {% if user.is_authenticated %}
+        <form action="{% url 'logoutuser' %}" method="POST">
+            {% csrf_token %}
+            <input class="logout-btn" type="submit" value="Logout">
+        </form>
+    {% else %}
+        <a class="nav-link" href="{% url 'loginuser' %}">Login</a>
+    {% endif %}
+</div>
+
+<h2>{{ member.get_full_name }}</h2>
+<div class="error-msg">
+    {% if error %}
+        {{ error }}
+        {{ form.errors }}
+    {% endif %}
+</div>
+<div class="table-container">
+    <table>
+        <tr>
+            <th>поле</th>
+            <th>инфо</th>
+        </tr>
+        <th>tg</th>
+        <td><a href="https://t.me/{{ member.get_username }}" target="_blank">{{ member.tg_username }}</a></td>
+        {% for field, value in member.get_all_info.items %}
+            <tr>
+                <th>{{ field }}</th>
+                {% if value %}
+                    {% if value|date %}
+                        <td>{{ value|date:"d.m.Y" }}</td>
+                    {% else %}
+                        <td>{{ value|linebreaksbr }}</td>
+                    {% endif %}
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="container2">
+    <a class="add-btn" href="{% url 'members:edit_member' member.id %}">Редактировать информацию</a>
+    <form method="POST" action="{% url 'members:delete_member' member.id %}">
+        {% csrf_token %}
+        <button type="submit" class="add-btn">Удалить участника</button>
+    </form>
+</div>
+</body>
+</html>

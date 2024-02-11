@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<!-- add_project.html -->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        input,
+        select,
+        textarea {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            width: 100%; /* 100% width */
+            min-width: calc(100% - 16px); /* Min width excluding padding */
+            max-width: calc(100% - 16px); /* Max width excluding padding */
+            height: 80px; /* Initial height */
+            min-height: 80px; /* Min height */
+            max-height: 200px; /* Max height */
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+<form method="POST">
+    {% csrf_token %}
+    <h1>Редактировать проект</h1>
+
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" value="{{ project.name }}" required>
+
+    <label for="description">Описание:</label>
+    <textarea id="description" name="description" rows="4" required>{{ project.description }}</textarea>
+
+    <label for="by_team">Совет-реализатор:</label>
+    {{ form.by_team }}
+    {#    <input type="text" id="by_team" name="by_team" value="{{ project.by_team }}" required>#}
+
+    <label for="manager">Руководитель:</label>
+    <input type="text" id="manager" name="manager" value="{{ project.manager }}" required>
+
+    <label for="author">Автор:</label>
+    <input type="text" id="author" name="author" value="{{ project.author }}" required>
+
+    <label for="period_type">Продолжительность:</label>
+    {{ form.period_type }}
+
+    {#    <label for="start_date">Дата начала реализации:</label>#}
+    {#    <input type="date" id="start_date" name="start_date" value="{{ project.start_date|date:'d.m.Y' }}" required>#}
+    <label for="start_date">Дата начала реализации:</label>
+    <input type="date" id="start_date" name="start_date" value="{{ project.start_date|date:'Y-m-d' }}" required>
+
+    <label for="status">Отметить как завершенный:</label>
+    <input type="checkbox" id="status" name="status" {% if project.status %}checked{% endif %}>
+
+    {% if project.status %}
+        <label for="end_date" id="endDateLabel" style="display: none;">Дата окончания реализации:</label>
+        <input type="date" id="end_date" name="end_date" style="display: none;"
+               value="{{ project.end_date|date:'Y-m-d' }}">
+    {% endif %}
+
+    <script>
+        var statusInput = document.getElementById('status');
+        var endDateLabel = document.getElementById('endDateLabel');
+        var endDate = document.getElementById('end_date');
+
+        if (statusInput.checked) {
+            endDateLabel.style.display = 'block';
+            endDate.style.display = 'block';
+        } else {
+            endDateLabel.style.display = 'none';
+            endDate.style.display = 'none';
+        }
+
+        statusInput.addEventListener('change', function () {
+            if (statusInput.checked) {
+                endDateLabel.style.display = 'block';
+                endDate.style.display = 'block';
+            } else {
+                endDateLabel.style.display = 'none';
+                endDate.style.display = 'none';
+            }
+            endDate.style.display = statusInput.checked ? 'block' : 'none';
+        });
+    </script>
+
+    <button type="submit" value="Save">Сохранить</button>
+</form>
+</body>

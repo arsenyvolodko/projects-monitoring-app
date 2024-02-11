@@ -1,0 +1,182 @@
+<!-- your_template.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All grants</title>
+    <!-- Добавьте стили для красивого оформления таблицы -->
+    <style>
+        .table-container {
+            margin: 20px; /* Add margin around the table */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        h2 {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        body, html {
+        {#height: 100%;#} margin: 0;
+
+            .container {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                height: 10vh;
+                background: #dcdcdc; /* Light gray background */
+            }
+
+            .nav-link {
+                color: #333; /* Dark gray text color */
+                font-size: 18px;
+                font-family: Inter, serif;
+                font-weight: 400;
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+
+            .nav-link-custom {
+            {#color: #333; /* Dark gray text color */#} font-size: 18px;
+                font-family: Inter, serif;
+                font-weight: 400;
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+                background-color: #798083; /* Blue background */
+                color: white; /* White text */
+            }
+
+            .nav-link:hover {
+                background-color: #798083; /* Blue background on hover */
+                color: white; /* White text on hover */
+
+            }
+
+            .nav-link {
+                color: #333; /* Dark gray text color */
+                font-size: 20px;
+                font-family: Inter, serif;
+                font-weight: 400;
+                word-wrap: break-word;
+            }
+
+            .logout-btn {
+                color: #333; /* Dark gray text color */
+                font-size: 20px;
+                font-family: Inter, serif;
+                font-weight: 400;
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                border: none;
+                background-color: transparent; /* Transparent background */
+                transition: background-color 0.3s;
+            }
+
+            .logout-btn:hover {
+                background-color: #798083; /* Red background on hover */
+                color: white; /* White text on hover */
+            }
+
+            .add-btn {
+                display: inline-block;
+                padding: 7px 50px; /* Увеличенная ширина, уменьшенная высота */
+                background-color: #798083; /* Более темный цвет фона */
+                color: white; /* Белый текст */
+                font-size: 18px;
+                font-family: Inter, serif;
+                font-weight: 400;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+                margin-left: 20px;
+            }
+
+            .add-btn:hover {
+                background-color: #dcdcdc; /* Red background on hover */
+                color: black; /* White text on hover */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="nav-link" href="{% url 'team:all_teams' %}">Советы</a>
+    <a class="nav-link" href="{% url 'project:all_projects' %}">Проекты</a>
+    <a class="nav-link-custom" href="{% url 'grant:all_grants' %}">Гранты</a>
+    <a class="nav-link" href="{% url 'members:all_members' %}">Участники</a>
+    {% if user.is_authenticated %}
+        <form action="{% url 'logoutuser' %}" method="POST">
+            {% csrf_token %}
+            <input class="logout-btn" type="submit" value="Logout">
+        </form>
+    {% else %}
+        <a class="nav-link" href="{% url 'loginuser' %}">Login</a>
+    {% endif %}
+</div>
+{#<h2>Информация по грантам</h2>#}
+<h2>Общая сумма грантов по проектам: {{ grants.first.get_all_sponsored_money }}₽ </h2>
+<div class="table-container">
+    <table>
+        <tr>
+            <th></th>
+            {% for project in projects %}
+                <th><a href="{% url 'project:specific_project' project.id %}">{{ project.name }}</a></th>
+            {% endfor %}
+            <th>Итого</th>
+
+        </tr>
+        {% for grant in grants %}
+            <tr>
+                <th><a href="{% url 'grant:specific_grant' grant.id %}">{{ grant.name }}</a></th>
+                {% for sum_ in grant.get_sponsored_money_for_all_projects.values %}
+                    {% if sum_ == "не подавали" %}
+                        <td>не подавали</td>
+                    {% else %}
+                        <td>{{ sum_ }}₽</td>
+                    {% endif %}
+                {% endfor %}
+                <th>{{ grant.get_sponsored_money }}₽</th>
+            </tr>
+        {% endfor %}
+        <th>Итого</th>
+        {% for project in projects %}
+            <th>{{ project.get_sponsored_money }}₽</th>
+        {% endfor %}
+
+        <div class="total">
+            <th>{{ grants.first.get_all_sponsored_money }}₽</th>
+        </div>
+    </table>
+</div>
+
+<p>
+    <a class="add-btn" href="{% url 'grant:add_new_grant' %}">Добавить грант</a>
+</p>
+</body>
+</html>

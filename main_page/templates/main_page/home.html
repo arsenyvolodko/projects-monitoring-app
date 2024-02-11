@@ -1,0 +1,81 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>Your Title</title>#}
+{#    <style>#}
+{#        body, html {#}
+        {#height: 100%;#} margin: 0;
+{#        }#}
+{##}
+{#        .container {#}
+{#            display: flex;#}
+{#            justify-content: space-around;#}
+{#            align-items: center;#}
+{#            height: 10vh;#}
+{#            background: #dcdcdc; /* Light gray background */#}
+{#        }#}
+{##}
+{#        .nav-link {#}
+{#            color: #333; /* Dark gray text color */#}
+{#            font-size: 18px;#}
+{#            font-family: Inter, serif;#}
+{#            font-weight: 400;#}
+{#            text-decoration: none;#}
+{#            padding: 10px 20px;#}
+{#            border-radius: 5px;#}
+{#            transition: background-color 0.3s;#}
+{#        }#}
+{##}
+{#        .nav-link:hover {#}
+{#            background-color: #798083; /* Blue background on hover */#}
+{#            color: white; /* White text on hover */#}
+{#        }#}
+{##}
+{#        .nav-link {#}
+{#            color: #333; /* Dark gray text color */#}
+{#            font-size: 20px;#}
+{#            font-family: Inter, serif;#}
+{#            font-weight: 400;#}
+{#            word-wrap: break-word;#}
+{#        }#}
+{##}
+{#        .logout-btn {#}
+{#            color: #333; /* Dark gray text color */#}
+{#            font-size: 20px;#}
+{#            font-family: Inter, serif;#}
+{#            font-weight: 400;#}
+{#            text-decoration: none;#}
+{#            padding: 10px 20px;#}
+{#            border-radius: 5px;#}
+{#            border: none;#}
+{#            background-color: transparent; /* Transparent background */#}
+{#            transition: background-color 0.3s;#}
+{#        }#}
+{##}
+{#        .logout-btn:hover {#}
+{#            background-color: #798083; /* Red background on hover */#}
+{#            color: white; /* White text on hover */#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{#{% block content %}#}
+{#    <div class="container">#}
+{#        <a class="nav-link" href="{% url 'team:all_teams' %}">Советы</a>#}
+{#        <a class="nav-link" href="{% url 'project:all_projects' %}">Проекты</a>#}
+{#        <a class="nav-link" href="{% url 'grant:all_grants' %}">Гранты</a>#}
+{#        <a class="nav-link" href="{% url 'members:all_members' %}">Участники</a>#}
+{#        {% if user.is_authenticated %}#}
+{#            <form action="{% url 'logoutuser' %}" method="POST">#}
+{#                {% csrf_token %}#}
+{#                <input class="logout-btn" type="submit" value="Logout">#}
+{#            </form>#}
+{#        {% else %}#}
+{#            <a class="nav-link" href="{% url 'loginuser' %}">Login</a>#}
+{#        {% endif %}#}
+{#    </div>#}
+{#{% endblock %}#}
+{#</body>#}
+{#</html>#}

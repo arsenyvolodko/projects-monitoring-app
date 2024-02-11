@@ -1,0 +1,307 @@
+<!-- your_template.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.name }}</title>
+    <style>
+        .table-container {
+            margin: 20px; /* Add margin around the table */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        h2 {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        body, html {
+        {#height: 100%;#} margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 10vh;
+            background: #dcdcdc; /* Light gray background */
+        }
+
+        .nav-link {
+            color: #333; /* Dark gray text color */
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link-custom {
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            background-color: #798083; /* Blue background */
+            color: white; /* White text */
+        }
+
+        .nav-link:hover {
+            background-color: #798083; /* Blue background on hover */
+            color: white; /* White text on hover */
+        }
+
+        .nav-link {
+            color: #333; /* Dark gray text color */
+            font-size: 20px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            word-wrap: break-word;
+        }
+
+        .logout-btn {
+            color: #333; /* Dark gray text color */
+            font-size: 20px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: transparent; /* Transparent background */
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #798083; /* Red background on hover */
+            color: white; /* White text on hover */
+        }
+
+        .add-btn,
+        .edit-btn,
+        .delete-btn {
+            display: inline-block;
+            padding: 7px 50px; /* Увеличенная ширина, уменьшенная высота */
+            background-color: #798083; /* Более темный цвет фона */
+            color: white; /* Белый текст */
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin-left: 20px;
+            border: none;
+        }
+
+
+        .add-btn:hover,
+        .edit-btn:hover,
+        .delete-btn:hover {
+            background-color: #dcdcdc; /* Цвет фона при наведении */
+            color: #333; /* Черный текст при наведении */
+        }
+
+        .project-name {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 20px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .project-container {
+            display: flex;
+            align-items: center; /* Центрирование по вертикали */
+            justify-content: space-around;
+        }
+
+        .project-description,
+        .status-description {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 20px;
+            text-align: left;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Центрирование по горизонтали */
+            justify-content: center; /* Центрирование по вертикали */
+        }
+
+        .project-description {
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+
+        .status-description {
+            margin-top: 20px;
+            margin-right: 10%;
+            margin-bottom: 20px;
+        }
+
+
+        .project-manager {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 20px;
+            text-align: left;
+            margin-left: 10%;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .project-grants-info {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 20px;
+            text-align: left;
+            margin-left: 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+
+
+{% block content %}
+
+    <div class="container">
+        <a class="nav-link" href="{% url 'team:all_teams' %}">Советы</a>
+        <a class="nav-link-custom" href="{% url 'project:all_projects' %}">Проекты</a>
+        <a class="nav-link" href="{% url 'grant:all_grants' %}">Гранты</a>
+        <a class="nav-link" href="{% url 'members:all_members' %}">Участники</a>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logoutuser' %}" method="POST">
+                {% csrf_token %}
+                <input class="logout-btn" type="submit" value="Logout">
+            </form>
+        {% else %}
+            <a class="nav-link" href="{% url 'loginuser' %}">Login</a>
+        {% endif %}
+    </div>
+
+
+    <div class="project-name">
+        <h1>{{ project.name }}</h1>
+    </div>
+
+    <div class="project-container">
+
+        <div class="project-description">
+            {{ project.description }}
+        </div>
+
+        <div class="status-description">
+            {% if not project.status %}
+                Статус: в реализации
+                {% if project.start_date %}
+                    <br>
+                    <div>{{ project.start_date|date:"d.m.Y" }} - н.в.</div>
+                {% endif %}
+            {% else %}
+                Статус: завершен
+                {% if project.start_date and project.end_date %}
+                    <br>
+                    <div>{{ project.start_date|date:"d.m.Y" }} - {{ project.end_date|date:"d.m.Y" }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="project-manager">
+        <p>Руководитель проекта: {{ project.manager }}</p>
+    </div>
+
+
+    <body>
+    <h2>Общая информация</h2>
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Совет-реализатор</th>
+                <th>Автор проекта</th>
+                <th>Продолжительность</th>
+                <th>Средств получено</th>
+            </tr>
+            <tr>
+                <td><a href="{% url 'team:specific_team' project.by_team.id %}">{{ project.by_team }}</a></td>
+                <td>{{ project.author }}</td>
+                <td>{{ project.period_type }}</td>
+                <td>{{ project.get_sponsored_money }}₽</td>
+            </tr>
+        </table>
+    </div>
+
+    <p>
+        <a class="edit-btn" href="{% url 'project:edit_project' project.id %}">Редактировать</a>
+    </p>
+    <form method="POST" action="{% url 'project:delete_project' project.id %}">
+        {% csrf_token %}
+        <button type="submit" class="delete-btn">Удалить</button>
+    </form>
+
+    <h2>Выигранные гранты</h2>
+    {% if project.get_sponsored_money == 0 %}
+
+        <div class="project-grants-info">
+            <p>У проекта пока нет выигранных грантов</p>
+        </div>
+    {% else %}
+
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Грант</th>
+                    <th>Средств получено</th>
+                </tr>
+                {% for grant, sum_ in project.get_sponsored_money_from_all_grants.items %}
+                    {% if sum_ != 0 and sum_ != 'не подавали' %}
+                        <tr>
+                            <td><a href="{% url 'grant:specific_grant' grant.id %}">{{ grant.name }}</a></td>
+                            <td>{{ sum_ }}₽</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
+    <p>
+        <a class="add-btn" href="{% url 'project:add_sponsored_money' project.id %}">Добавить грант</a>
+    </p>
+    <p></p>
+    </body>
+{% endblock %}
+</html>

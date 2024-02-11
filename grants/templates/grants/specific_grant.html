@@ -1,0 +1,253 @@
+<!-- your_template.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ grant.nameg }}</title>
+    <style>
+        .table-container {
+            margin: 20px; /* Add margin around the table */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        h2 {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 10vh;
+            background: none;
+        }
+
+        .container2 a,
+        .container2 form {
+            margin: 10px; /* Убедимся, что внутренний отступ сброшен */
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 10vh;
+            background: #dcdcdc; /* Light gray background */
+        }
+
+        .nav-link {
+            color: #333; /* Dark gray text color */
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link-custom {
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            background-color: #798083; /* Blue background */
+            color: white; /* White text */
+        }
+
+        .nav-link:hover {
+            background-color: #798083; /* Blue background on hover */
+            color: white; /* White text on hover */
+        }
+
+        .nav-link {
+            color: #333; /* Dark gray text color */
+            font-size: 20px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            word-wrap: break-word;
+        }
+
+        .logout-btn {
+            color: #333; /* Dark gray text color */
+            font-size: 20px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: transparent; /* Transparent background */
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #798083; /* Red background on hover */
+            color: white; /* White text on hover */
+        }
+
+        .edit-btn,
+        .delete-btn {
+            display: inline;
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            margin-left: 20px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            background: none;
+            color: #798083;
+        }
+
+        .add-btn {
+            display: inline-block;
+            font-size: 18px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            margin-left: 20px;
+            border: none;
+            background-color: #798083; /* Transparent background */
+            cursor: pointer;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+
+        }
+
+        .add-btn:hover {
+            background-color: #dcdcdc; /* Red background on hover */
+            color: black; /* White text on hover */
+        }
+
+
+        .project-name {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 20px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 20px;
+            font-family: Inter, serif;
+            font-weight: 400;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+
+    </style>
+</head>
+
+
+{% block content %}
+
+    <div class="container">
+        <a class="nav-link" href="{% url 'team:all_teams' %}">Советы</a>
+        <a class="nav-link" href="{% url 'project:all_projects' %}">Проекты</a>
+        <a class="nav-link-custom" href="{% url 'grant:all_grants' %}">Гранты</a>
+        <a class="nav-link" href="{% url 'members:all_members' %}">Участники</a>
+        {% if user.is_authenticated %}
+            <form action="{% url 'logoutuser' %}" method="POST">
+                {% csrf_token %}
+                <input class="logout-btn" type="submit" value="Logout">
+            </form>
+        {% else %}
+            <a class="nav-link" href="{% url 'loginuser' %}">Login</a>
+        {% endif %}
+    </div>
+
+
+    <div class="project-name">
+        <h1>{{ grant.name }}</h1>
+    </div>
+
+
+    <body>
+    {% if error %}
+        <div class="error-msg">
+            <h2>{{ error }}</h2>
+        </div>
+    {% endif %}
+    {% if not grant.get_only_involved_projects.items %}
+        <h2>Пока что ни один проект не был подан на этот грант.</h2>
+    {% else %}
+        <h2>Участвовашие проекты</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Проект</th>
+                    <th>Выигранная Сумма</th>
+                    <th>Действия</th> <!-- Добавляем новую ячейку для действий -->
+                </tr>
+                {% for project, sum_ in grant.get_only_involved_projects.items %}
+                    <tr>
+                        <td><a href="{% url 'project:specific_project' project.id %}">{{ project.name }}</a></td>
+                        <td>{{ sum_ }}₽</td>
+                        <td>
+                            <a class="edit-btn"
+                               href="{% url 'grant:edit_sponsored_money_in_grants' project.id grant.id %}">✎</a>
+                            <form class="delete-btn" method="POST"
+                                  action="{% url 'grant:delete_sponsored_money_in_grants' project.id grant.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="edit-btn"> 🗑</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    <h2>
+        <a class="add-btn" href="{% url 'grant:add_sponsored_money' grant.id %}">Добавить участвовавший проект</a>
+    </h2>
+    <br>
+    <div class="container2">
+        <a class="add-btn" href="{% url 'grant:edit_grant' grant.id %}">Редактировать название гранта</a>
+        <form method="POST" action="{% url 'grant:delete_grant' grant.id %}">
+            {% csrf_token %}
+            <button type="submit" class="add-btn">Удалить грант</button>
+        </form>
+    </div>
+    <p></p>
+    </body>
+{% endblock %}
+</html>
