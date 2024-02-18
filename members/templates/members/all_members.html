@@ -164,7 +164,7 @@
     {% endif %}
 </div>
 
-<h2>Участники советов</h2>
+<h2>Участники советов (Итого: {{ members.count }})</h2>
 <h2><a class="add-btn" href="{% url 'members:add_new_member' %}">Добавить участника</a></h2>
 
 {% for team in teams %}
