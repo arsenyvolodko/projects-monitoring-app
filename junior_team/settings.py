@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 
+import dj_database_url
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -83,15 +84,19 @@ WSGI_APPLICATION = "junior_team.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': os.environ["DB_NAME"],
+#         'USER': os.environ["DB_USER"],
+#         'PASSWORD': os.environ["DB_PASSWORD"],
+#         'HOST': os.environ["DB_HOST"],
+#         'PORT': os.environ["DB_PORT"],
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ["DB_NAME"],
-        'USER': os.environ["DB_USER"],
-        'PASSWORD': os.environ["DB_PASSWORD"],
-        'HOST': os.environ["DB_HOST"],
-        'PORT': os.environ["DB_PORT"],
-    }
+    'default': dj_database_url.config(default=os.environ['DATABASE_URL'])
 }
 
 # Password validation

@@ -12,6 +12,8 @@ psycopg2-binary = "^2.9.9"
 django-flatpickr = "^2.0.2"
 poetry-plugin-dotenv = "^0.5.3"
 gunicorn = "^21.2.0"
+dj-config-url = "^0.1.1"
+dj-database-url = "^2.1.0"
 
 
 [build-system]

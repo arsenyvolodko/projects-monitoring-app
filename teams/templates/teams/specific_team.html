@@ -37,8 +37,7 @@
         }
 
         body, html {
-            {#height: 100%;#}
-            margin: 0;
+        {#height: 100%;#} margin: 0;
         }
 
         .container {
@@ -271,10 +270,12 @@
             </tr>
             {% for member in team.get_members %}
                 <tr>
-                    <td>{{ member.get_full_name }}</td>
-                    <td><a href="https://t.me/{{ member.get_username }}" target="_blank">{{ member.tg_username }}</a>
+                    <td>
+                        <a href="{% url 'members:specific_member' member.id %}">{{ member.get_full_name }}</a>
                     </td>
-
+                    <td>
+                        <a href="https://t.me/{{ member.get_username }}" target="_blank">{{ member.tg_username }}</a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
