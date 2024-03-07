@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import NewProjectForm, NewSponsoredMoneyForm
+from django.db.models.deletion import ProtectedError
 from .models import ProjectModel, SponsoredMoneyModel
 
 
@@ -53,7 +54,15 @@ def delete_project(request, project_id):
             return redirect('project:all_projects')
         else:
             return render(request, 'projects/all_projects.html', {'projects': projects})
-    except Exception:
+    except ProtectedError as e:
+        return render(request, 'projects/specific_project.html',
+                      {'project': project,
+                       'error': 'Нельзя удалить проект до тех пор, пока существуют гранты, в которых проект участвовал.\n'
+                                'Для удаления проекта необходимо удалить записи о полученных средствах в рамках грантов, в которых участвовал проект.\n'
+                                'Для этого необходимо перейти на страницу грантов, открыть страницу конкретного гранта, в котором участвовал проект,'
+                                ' и удалить записи о полученных средствах (там справа напротив каждого участвовавшего проекта есть кнопочка корзины).'})
+    except Exception as e:
+        print(e, type(e))
         return render(request, 'projects/specific_project.html', {'project': project,
                                                                   'error': 'почему-то не удаляется :(\n''айтишник посредственный оказался'})
 
@@ -113,4 +122,3 @@ def delete_sponsored_money(request, project_id, grant_id, to_page='project:speci
     except Exception:
         return render(request, 'projects/specific_project.html', {'sponsored_money': sponsored_money,
                                                                   'error': 'почему-то не удаляется :(\n''айтишник посредственный оказался'})
-

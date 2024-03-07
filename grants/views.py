@@ -33,7 +33,6 @@ def add_new_grant(request):
 
 def specific_grant(request, grant_id):
     grant = GrantModel.objects.get(pk=grant_id)
-    print(grant)
     return render(request, 'grants/specific_grant.html', {'grant': grant, })
 
 

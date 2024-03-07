@@ -190,6 +190,16 @@
             margin-bottom: 20px;
         }
 
+        .error-message {
+            font-family: Inter, serif;
+            font-weight: 400;
+            font-size: 20px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: red;
+        }
+
     </style>
 </head>
 
@@ -270,6 +280,9 @@
     <form method="POST" action="{% url 'project:delete_project' project.id %}">
         {% csrf_token %}
         <button type="submit" class="delete-btn">Удалить</button>
+        {% if error %}
+            <div class="error-message"><p>{{ error }}</p></div>
+        {% endif %}
     </form>
 
     <h2>Выигранные гранты</h2>
