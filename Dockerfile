@@ -1,15 +1,24 @@
-FROM python:3.11-buster
+##CMD ["poetry", "run", "gunicorn", "django_api_files.wsgi:application", "--bind", ":8000"]
+#CMD ["gunicorn", "-c", "conf/gunicorn_config.py", "junior_team.wsgi"]
 
-RUN pip install poetry==1.7.1
+FROM python:3.10-slim
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install poetry==1.7.1
+
+ENV POETRY_VIRTUALENVS_CREATE=false
+
 COPY pyproject.toml poetry.lock ./
-
-RUN poetry config virtualenvs.create false
-RUN poetry install --no-dev --no-root
-
+RUN poetry install --no-interaction --no-ansi
 COPY . .
 
-#CMD ["poetry", "run", "gunicorn", "django_api_files.wsgi:application", "--bind", ":8000"]
-CMD ["gunicorn", "-c", "conf/gunicorn_config.py", "junior_team.wsgi"]
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+CMD ["poetry", "run", "gunicorn", "-c", "conf/gunicorn_config.py", "junior_team.wsgi"]
