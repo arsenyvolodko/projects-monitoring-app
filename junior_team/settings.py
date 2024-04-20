@@ -30,7 +30,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ["DEBUG"]
 
-ALLOWED_HOSTS = ['154.194.53.151', '127.0.0.1:8000', 'www.juniorrosatomteam.ru', 'juniorrosatomteam.ru', '127.0.0.1']
+ALLOWED_HOSTS = ['154.194.53.151', '154.194.53.151:8000', '127.0.0.1', '127.0.0.1:8000', 'www.juniorrosatomteam.ru', 'juniorrosatomteam.ru']
 CSRF_TRUSTED_ORIGINS = ['https://www.juniorrosatomteam.ru', 'https://juniorrosatomteam.ru']
 
 # Application definition
